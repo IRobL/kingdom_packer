@@ -6,7 +6,27 @@
     "region": "us-west-2",
     "source_ami": "ami-bf8e20df",
     "instance_type": "t2.nano",
-    "ssh_username": "root",
-    "ami_name": "Main Box {{timestamp}}"
-  }]
+    "ssh_username": "admin",
+    "ami_name": "Main Box {{timestamp}}",
+    "tags": {
+      "{{user `initial_deploy_env`}}": "deployable",
+      "main_box_version": "{{user `main_box_version`}}"
+    }
+  }],
+  "provisioners": [{
+    "type": "file",
+    "source": "keys/deploy_main_box",
+    "destination": "/tmp/packer/deploy_main_box"
+  },
+  {
+    "type": "shell",
+    "environment_vars": [
+      "MAIN_APP_VERSION=v0.0.1"
+    ],
+    "remote_folder": "/tmp",
+    "scripts": [
+      "scripts/common.sh"
+    ]
+  }
+  ]
 }

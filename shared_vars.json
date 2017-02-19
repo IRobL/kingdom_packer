@@ -1,0 +1,5 @@
+{
+  "packer_tmp_dir": "/opt/mithrilOS/build/tmp",
+  "initial_deploy_env": "stg-east",
+  "main_box_version": "893600eac7e62261b08fe88fb0de44159161f441"
+}
