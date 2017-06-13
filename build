@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
+# Setup the region, default is us-west-1
+
 packer build \
-  -var "aws_access_key=${HOBBY_AWS_ACCESS_KEY_ID}" \
-  -var "aws_secret_key=${HOBBY_AWS_SECRET_ACCESS_KEY}" \
   -var-file=shared_vars.json \
-  $1
+  $@

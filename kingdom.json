@@ -1,0 +1,38 @@
+{
+  "variables": {
+    "region": "us-west-1",
+    "source_ami": "ami-9899c7f8"
+  },
+
+  "builders": [
+    {
+      "type": "amazon-ebs",
+      "region": "{{user `region`}}",
+      "source_ami": "{{user `source_ami`}}",
+      "instance_type": "t2.micro",
+      "ssh_username": "admin",
+      "ami_name": "kingdom {{timestamp}}",
+      "tags": {
+        "{{user `initial_deploy_env`}}": "deployable",
+        "kingdom_version": "{{user `kingdom_version`}}"
+      }
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "file",
+      "source": "keys/deploy_kingdom",
+      "destination": "/tmp/packer/deploy_kingdom"
+    },
+    {
+      "type": "shell",
+      "environment_vars": [
+        "MAIN_APP_VERSION=v0.0.1"
+      ],
+      "remote_folder": "/tmp",
+      "scripts": [
+        "scripts/common.sh"
+      ]
+    }
+  ]
+}
