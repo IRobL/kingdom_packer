@@ -4,11 +4,10 @@ Because the free tier of aws lets you have 1 T2.micro for free, without charge, 
 
 ## Services
 
+- Mumble
+- Dokku
 - Jenkins
 - GitLab
-- Mumble
-- Nginx
-- App: discourse, tournement, mission app
 
 
 ## Reference Material
