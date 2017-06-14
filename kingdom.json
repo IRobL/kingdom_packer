@@ -1,7 +1,6 @@
 {
   "variables": {
     "region": "us-west-1",
-    "source_ami": "ami-9899c7f8",
     "kingdom_version": "v0.0.0"
   },
 
@@ -9,9 +8,16 @@
     {
       "type": "amazon-ebs",
       "region": "{{user `region`}}",
-      "source_ami": "{{user `source_ami`}}",
+      "source_ami_filter": {
+        "filters": {
+          "name": "debian-ssh--*"
+        },
+        "owners": ["self"],
+        "most_recent": true
+      },
       "instance_type": "t2.micro",
       "ssh_username": "admin",
+      "ssh_port": "53",
       "ami_name": "kingdom--{{timestamp}}",
       "tags": {
         "description": "A debian based ami for use with the kingdom PaaS project.",
@@ -21,19 +27,26 @@
   ],
   "provisioners": [
     {
+      "type": "shell",
+      "inline": ["mkdir /home/admin/scripts"]
+    },
+    {
       "type": "file",
-      "source": "keys/deploy_kingdom",
-      "destination": "/tmp/packer/deploy_kingdom"
+      "source": "kingdom/provision.sh",
+      "destination": "/home/admin/scripts/provision.sh"
+    },
+    {
+      "type": "file",
+      "source": "kingdom/ssh/config",
+      "destination": "/home/admin/.ssh/config"
     },
     {
       "type": "shell",
-      "environment_vars": [
-        "MAIN_APP_VERSION=v0.0.1"
-      ],
-      "remote_folder": "/home/admin",
-      "scripts": [
-        "scripts/listen_for_sshd_port_53.sh"
+      "inline": [
+        "cd /home/admin/scripts",
+        "bash provision.sh TEMPORARY-DOMAIN.com"
       ]
     }
+
   ]
 }

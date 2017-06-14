@@ -1,0 +1,30 @@
+{
+  "variables": {
+    "region": "us-west-1",
+    "source_ami": "ami-9899c7f8"
+  },
+
+  "builders": [
+    {
+      "type": "amazon-ebs",
+      "region": "{{user `region`}}",
+      "source_ami": "{{user `source_ami`}}",
+      "instance_type": "t2.micro",
+      "ssh_username": "admin",
+      "ssh_port": "22",
+      "ami_name": "debian-ssh--{{timestamp}}",
+      "tags": {
+        "description": "A debian based ami that listens for ssh on compliant ports (53)."
+      }
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "remote_folder": "/home/admin",
+      "scripts": [
+        "scripts/listen_for_sshd_port_53.sh"
+      ]
+    }
+  ]
+}
