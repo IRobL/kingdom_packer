@@ -1,7 +1,8 @@
 {
   "variables": {
     "region": "us-west-1",
-    "source_ami": "ami-9899c7f8"
+    "source_ami": "ami-9899c7f8",
+    "kingdom_version": "v0.0.0"
   },
 
   "builders": [
@@ -11,9 +12,9 @@
       "source_ami": "{{user `source_ami`}}",
       "instance_type": "t2.micro",
       "ssh_username": "admin",
-      "ami_name": "kingdom {{timestamp}}",
+      "ami_name": "kingdom--{{timestamp}}",
       "tags": {
-        "{{user `initial_deploy_env`}}": "deployable",
+        "description": "A debian based ami for use with the kingdom PaaS project.",
         "kingdom_version": "{{user `kingdom_version`}}"
       }
     }
@@ -29,9 +30,9 @@
       "environment_vars": [
         "MAIN_APP_VERSION=v0.0.1"
       ],
-      "remote_folder": "/tmp",
+      "remote_folder": "/home/admin",
       "scripts": [
-        "scripts/common.sh"
+        "scripts/listen_for_sshd_port_53.sh"
       ]
     }
   ]
